@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  zipcode: 1
+  votes: 1
+  category_id: 1
+  description: MyString
+  resolved: false
+
+two:
+  title: MyString
+  zipcode: 1
+  votes: 1
+  category_id: 1
+  description: MyString
+  resolved: false
