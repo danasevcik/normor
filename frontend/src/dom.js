@@ -111,18 +111,14 @@ class Dom {
 
   renderIssueModal(issueId) {
     const clickedIssue = Issue.findById(issueId);
-
     const clickedTitle = clickedIssue.title
     const clickedDescription = clickedIssue.description
     const clickedVotes = clickedIssue.votes
     const clickedDateReported = clickedIssue.createdDate.slice(0,10)
     const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
     const clickedZip = clickedIssue.zipcode
-    // const clickedCategory = Category.all.find(category => {
-    //   return category.id === clickedIssue.category_id
-    // })
-    // const clickedCategory =
     const clickedComments = clickedIssue.comments
+    // sort this array by number of votes so that comments render in proper order
 
     this.issueModal.innerHTML = ''
       this.issueModal.innerHTML = `

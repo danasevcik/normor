@@ -1,7 +1,7 @@
 class Api::V1::CommentsController < ApplicationController
   def index
-    @comments = Comment.all
-    render json: @comments
+    comments = Comment.order(votes: :desc)
+    render json: comments
   end
 
   def create
