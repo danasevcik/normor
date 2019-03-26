@@ -1,6 +1,9 @@
 class Api::V1::IssuesController < ApplicationController
   def index
     issues = Issue.order(votes: :desc)
+
+    # issues.map{ |issue| issue[comments] }
+
     render json: issues
   end
 

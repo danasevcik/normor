@@ -1,5 +1,6 @@
 const adapter = (function() {
   const API_URL = 'http://localhost:3000/api/v1/issues';
+  const API_URL_COMMENTS = 'http://localhost:3000/api/v1/comments';
 
   return {
     fetchIssues: function() {
@@ -29,6 +30,25 @@ const adapter = (function() {
     },
     downvoteIssue: function(issueId) {
       return fetch(`${API_URL}/${issueId}/downvote`).then(response => response.json());
-    }
+    },
+    // fetchComments: function() {
+    //   return fetch(API_URL_COMMENTS)
+    //     .then(response => response.json());
+    // }
+    // ,
+    // createComment: function(params) {
+    //   return fetch(API_URL_COMMENTS, {
+    //       method: 'POST',
+    //       headers: { "Content-Type": "application/json"},
+    //       body: JSON.stringify(params)
+    //   })
+    //     .then(response => {
+    //       if(response.ok) {
+    //         return response.json();
+    //       }
+    //
+    //       throw "Something went wrong!!!!";
+    //     });
+    // }
   }
 })();

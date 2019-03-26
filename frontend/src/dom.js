@@ -7,6 +7,7 @@ class Dom {
     this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
     this.topMenu = document.querySelector('div.ui.top.menu');
     this.issueModal = document.getElementById('issue-modal');
+    // new comment form
   }
 
   addAllEventListeners() {
@@ -44,28 +45,30 @@ class Dom {
     });
   }
 
-  handleIssuesContainer(e) {
-    // debugger
-    console.log(e.target.className)
+  // handle submit for new comment
+  // send to adapter.createComment
 
+  handleIssuesContainer(e) {
+    console.log(e.target.className)
+    let issueId = parseInt(e.target.dataset.id)
     switch(e.target.className) {
       case 'ui positive button':
         adapter.upvoteIssue(e.target.dataset.id)
-          .then(issue => 
+          .then(issue =>
             e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
           );
         break;
       case 'ui button':
         adapter.downvoteIssue(e.target.dataset.id)
-          .then(issue => 
+          .then(issue =>
             e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
           );
         break;
       case 'ui segment':
-        renderIssueModal(issueId);
+        this.renderIssueModal(issueId);
         break;
       case 'issue details':
-        renderIssueModal(issueId);
+        this.renderIssueModal(issueId);
         break;
       default:
         console.log(e.target.className);
@@ -75,6 +78,54 @@ class Dom {
   renderIssueModal(issueId) {
     const clickedIssue = Issue.findById(issueId);
 
+    const clickedTitle = clickedIssue.title
+    const clickedDescription = clickedIssue.description
+    const clickedVotes = clickedIssue.votes
+    const clickedDateReported = clickedIssue.createdAt
+    const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
+    const clickedZip = clickedIssue.zipcode
+    const clickedCategory = Category.all.find(category => {
+      return category.id === clickedIssue.category_id
+    })
+    const clickedComments = clickedIssue.comments
+    // debugger
+
+    // console.log('clicked status', clickedStatus)
+    // console.log('clicked votes',clickedVotes);
+    // console.log('clicked category',clickedCategory);
+    // console.log('clicked id',issueId)
+    console.log('clicked comments',clickedComments)
+    // console.log(clickedIssue)
+
+    this.issueModal.innerHTML = ''
+    this.issueModal.innerHTML = `
+    <div class="header">Issue: ${clickedTitle}</div>
+    <div class="scrolling content">
+      <h2>Details</h2>
+      <h3>Description</h3>
+      <p>${clickedDescription}</p>
+      <h3>Votes</h3>
+      <p>${clickedVotes}</p>
+      <h3>Category</h3>
+      <p>${clickedCategory}</p>
+      <h3>Date Reported</h3>
+      <p>${clickedDateReported}</p>
+      <h3>Status</h3>
+      <p>${clickedStatus}</p>
+      <h3>Comments</h3>
+      ${clickedComments.map(comment => {
+        return `<p>${comment.content}</p>`
+      }).join('')}
+      <p></p>
+      <div class="actions">
+        <div class="ui black deny button">
+          Back
+        </div>
+        <div class="ui positive button">
+          Add New Comment
+          <i class="checkmark icon"></i>
+        </div>
+    `
     $('.ui.longer.modal').modal('show');
   }
 
@@ -91,11 +142,13 @@ class Dom {
     }
   }
 
+
+
   renderAllIssues() {
     console.log('Rendering all issues');
     this.issuesContainer.innerHTML = '';
     adapter.fetchIssues()
-      .then(issues => 
+      .then(issues =>
         issues.forEach(issue => this.issuesContainer.appendChild(new Issue(issue).toHTML()))
       );
   }

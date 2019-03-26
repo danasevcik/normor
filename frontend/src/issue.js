@@ -1,5 +1,5 @@
 class Issue {
-  constructor({id, title, location, votes, category, description, created_at, resolved}) {
+  constructor({id, title, location, votes, category, description, created_at, resolved, comments}) {
     this.id = id;
     this.title = title;
     this.location = location;
@@ -9,6 +9,10 @@ class Issue {
     this.createdDate = created_at;
     this.resolved = resolved;
     this.constructor.all.push(this);
+    this.comments = []
+    comments.forEach(comment => {
+      this.comments.push(new Comment(comment))
+    })
   }
 
   toHTML() {
@@ -26,7 +30,7 @@ class Issue {
           </div>
           <div class="ui segment" data-id="${this.id}">
             <h2 class="issue details" data-id="${this.id}">${this.title}</h2>
-            <span class="issue details" data-id="${this.id}">0 Comments</span>
+            <span class="issue details" data-id="${this.id}">${this.comments.length} Comments</span>
           </div>
         </div>
       </div>`;

@@ -5,6 +5,8 @@ class Comment {
     this.votes = votes;
     this.constructor.all.push(this);
   }
+
+  
 }
 
 Comment.all = [];
