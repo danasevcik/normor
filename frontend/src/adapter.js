@@ -35,21 +35,19 @@ const adapter = (function() {
     fetchCategories: function() {
       return fetch(API_URL_CATEGORIES)
         .then(response => response.json());
+    },
+    createComment: function(params) {
+      return fetch(API_URL_COMMENTS, {
+          method: 'POST',
+          headers: { "Content-Type": "application/json"},
+          body: JSON.stringify(params)
+      })
+        .then(response => {
+          if(response.ok) {
+            return response.json();
+          }
+          throw "Something went wrong!!!!";
+        });
     }
-    // ,
-    // createComment: function(params) {
-    //   return fetch(API_URL_COMMENTS, {
-    //       method: 'POST',
-    //       headers: { "Content-Type": "application/json"},
-    //       body: JSON.stringify(params)
-    //   })
-    //     .then(response => {
-    //       if(response.ok) {
-    //         return response.json();
-    //       }
-    //
-    //       throw "Something went wrong!!!!";
-    //     });
-    // }
   }
 })();

@@ -16,6 +16,7 @@ class Dom {
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
+    this.issueModal.addEventListener('click', this.handleAddComment.bind(this));
   }
 
   populateDropDown() {
@@ -26,6 +27,21 @@ class Dom {
       this.categoryDropdown.append(newOption)
     })
   }
+
+  handleAddComment(e) {
+    // console.log(e.target.dataset.id);
+    if (e.target.innerText === 'Add New Comment'){
+      // console.log('hi')
+      const commentContent = document.getElementById('comment-content').value
+      // console.log(commentContent);
+      adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
+      .then(comment =>
+        console.log(new Comment(comment))
+
+      )
+    }
+  }
+
 
   handleSubmit() {
     console.log('handling submit');
@@ -99,44 +115,41 @@ class Dom {
     // })
     // const clickedCategory =
     const clickedComments = clickedIssue.comments
-    // debugger
-
-    // console.log('clicked status', clickedStatus)
-    // console.log('clicked votes',clickedVotes);
-    // console.log('clicked category',clickedCategory);
-    // console.log('clicked id',issueId)
-    console.log('clicked comments',clickedComments)
-    // console.log(clickedIssue)
 
     this.issueModal.innerHTML = ''
-    this.issueModal.innerHTML = `
-    <div class="header">Issue: ${clickedTitle}</div>
-    <div class="scrolling content">
-      <h2>Details</h2>
-      <h3>Description</h3>
-      <p>${clickedDescription}</p>
-      <h3>Votes</h3>
-      <p>${clickedVotes}</p>
-      <h3>Category</h3>
-      <p>${clickedIssue.category}</p>
-      <h3>Date Reported</h3>
-      <p>${clickedDateReported}</p>
-      <h3>Status</h3>
-      <p>${clickedStatus}</p>
-      <h3>Comments</h3>
-      ${clickedComments.map(comment => {
-        return `<p>${comment.content}</p>`
-      }).join('')}
-      <p></p>
-      <div class="actions">
-        <div class="ui black deny button">
-          Back
-        </div>
-        <div class="ui positive button">
-          Add New Comment
-          <i class="checkmark icon"></i>
-        </div>
-    `
+      this.issueModal.innerHTML = `
+      <div class="header">Issue: ${clickedTitle}</div>
+      <div class="scrolling content">
+        <h2>Details</h2>
+        <h3>Description</h3>
+        <p>${clickedDescription}</p>
+        <h3>Votes</h3>
+        <p>${clickedVotes}</p>
+        <h3>Category</h3>
+        <p>${clickedIssue.category}</p>
+        <h3>Date Reported</h3>
+        <p>${clickedDateReported}</p>
+        <h3>Status</h3>
+        <p>${clickedStatus}</p>
+        <h3>Comments</h3>
+        ${clickedComments.map(comment => {
+          return `<div>${comment.content}</div>`
+        }).join('')}
+          <form class="ui form">
+            <div class="field">
+              <label>New Comment</label>
+              <textarea id='comment-content' name="content" placeholder="Type Your Comment Here"></textarea>
+            </div>
+          </form>
+        <p></p>
+        <div class="actions">
+          <div class="ui black deny button">
+            Back
+          </div>
+          <div class="ui positive button" data-id="${issueId}">
+            Add New Comment<i class="checkmark icon"></i>
+          </div>
+      `
     $('#view-issue-modal').modal('show');
   }
 
