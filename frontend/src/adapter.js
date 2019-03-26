@@ -6,6 +6,10 @@ const adapter = (function() {
       return fetch(API_URL)
         .then(response => response.json());
     },
+    fetchIssue: function(issueId) {
+      return fetch(`${API_URL}/${issueId}`)
+        .then(response => response.json());
+    },
     createIssue: function(params) {
       return fetch(API_URL, {
           method: 'POST',

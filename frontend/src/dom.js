@@ -6,12 +6,13 @@ class Dom {
     this.issuesContainer = document.querySelector('div.ui.stackable.grid.container');
     this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
     this.topMenu = document.querySelector('div.ui.top.menu');
+    this.issueModal = document.getElementById('issue-modal');
   }
 
   addAllEventListeners() {
     console.log('adding listeners')
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
-    this.issuesContainer.addEventListener('click', this.handleVote.bind(this));
+    this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
   }
 
@@ -43,33 +44,44 @@ class Dom {
     });
   }
 
-  handleVote(e) {
-    switch(e.target.innerText) {
-      case 'Upvote':
+  handleIssuesContainer(e) {
+    // debugger
+    console.log(e.target.className)
+
+    switch(e.target.className) {
+      case 'ui positive button':
         adapter.upvoteIssue(e.target.dataset.id)
           .then(issue => 
             e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
           );
         break;
-      case 'Downvote':
+      case 'ui button':
         adapter.downvoteIssue(e.target.dataset.id)
           .then(issue => 
             e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
           );
         break;
+      case 'ui segment':
+        renderIssueModal(issueId);
+        break;
+      case 'issue details':
+        renderIssueModal(issueId);
+        break;
       default:
-        console.log('click something else');
+        console.log(e.target.className);
     }
+  }
+
+  renderIssueModal(issueId) {
+    const clickedIssue = Issue.findById(issueId);
+
+    $('.ui.longer.modal').modal('show');
   }
 
   handleRightMenu(e) {
     switch(e.target.innerText) {
       case 'Submit New Issue':
         $('.ui.modal').modal('show');
-        // adapter.upvoteIssue(e.target.dataset.id)
-        //   .then(issue => 
-        //     e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
-        //   );
         break;
       case 'Refresh':
         this.renderAllIssues();

@@ -4,6 +4,11 @@ class Api::V1::IssuesController < ApplicationController
     render json: issues
   end
 
+  def show
+    issue = Issue.find(params[:id])
+    render json: issue
+  end
+
   def create
     @category = Category.find_or_create_by(title: params[:category])
     @issue = Issue.new(title: params[:title], description: params[:description], zipcode: params[:zipcode], category_id: @category.id, votes: 0, resolved: false)
