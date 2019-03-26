@@ -1,42 +1,46 @@
 class Dom {
   constructor() {
-    // this.form = document.querySelector('.ui.form')
+    this.newIssueForm = document.querySelector('form.ui.form');
+    this.newIssueSubmitButton = document.querySelector('div.ui.positive.right.labeled.icon.button');
     this.issues = document.querySelector('#allissues');
     this.issuesContainer = document.querySelector('div.ui.stackable.grid.container');
+    this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
+    this.topMenu = document.querySelector('div.ui.top.menu');
   }
 
   addAllEventListeners() {
     console.log('adding listeners')
-    // this.form.addEventListener('submit', this.handleSubmit.bind(this))
+    this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleVote.bind(this));
+    this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit() {
     console.log('handling submit');
 
-    const title = this.form.querySelector('#issuetitle').value
-    const description = this.form.querySelector('#issuedescription').value
-    const zipcode = this.form.querySelector('#issuezipcode').value
-    const category = this.form.querySelector('#issuecategory').value
+    const title = this.newIssueForm.querySelector('#issuetitle').value
+    const description = this.newIssueForm.querySelector('#issuedescription').value
+    const zipcode = this.newIssueForm.querySelector('#issuezipcode').value
+    const category = this.newIssueForm.querySelector('#issuecategory').value
 
-    this.form.querySelector('#issuetitle').value = ''
-    this.form.querySelector('#issuedescription').value = ''
-    this.form.querySelector('#issuezipcode').value = ''
-    this.form.querySelector('#issuecategory').value = 'Category'
+    this.newIssueForm.querySelector('#issuetitle').value = ''
+    this.newIssueForm.querySelector('#issuedescription').value = ''
+    this.newIssueForm.querySelector('#issuezipcode').value = ''
+    this.newIssueForm.querySelector('#issuecategory').value = 'Category'
 
     adapter.createIssue({title: title, description: description, zipcode: zipcode, category:category})
     .then(response => {
       console.log(response)
-      new Issue(response)
+      this.issuesContainer.appendChild(new Issue(response).toHTML());
+      $('.ui.modal').modal('hide');
     }).catch(error => {
       console.log('in the catch');
       const errorDiv = document.createElement('div')
       errorDiv.innerHTML = `
         <h1 class="header">That issue can not be posted.</h1>
       `
-      this.form.appendChild(errorDiv);
-    })
+      this.newIssueForm.appendChild(errorDiv);
+    });
   }
 
   handleVote(e) {
@@ -58,8 +62,26 @@ class Dom {
     }
   }
 
+  handleRightMenu(e) {
+    switch(e.target.innerText) {
+      case 'Submit New Issue':
+        $('.ui.modal').modal('show');
+        // adapter.upvoteIssue(e.target.dataset.id)
+        //   .then(issue => 
+        //     e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
+        //   );
+        break;
+      case 'Refresh':
+        this.renderAllIssues();
+        break;
+      default:
+        console.log('click something else');
+    }
+  }
+
   renderAllIssues() {
     console.log('Rendering all issues');
+    this.issuesContainer.innerHTML = '';
     adapter.fetchIssues()
       .then(issues => 
         issues.forEach(issue => this.issuesContainer.appendChild(new Issue(issue).toHTML()))
