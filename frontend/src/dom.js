@@ -16,7 +16,7 @@ class Dom {
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
-    this.issueModal.addEventListener('click', this.handleAddComment.bind(this));
+    this.issueModal.addEventListener('click', this.handleIssueModalClick.bind(this));
   }
 
   populateDropDown() {
@@ -28,17 +28,25 @@ class Dom {
     })
   }
 
-  handleAddComment(e) {
-    // console.log(e.target.dataset.id);
-    if (e.target.innerText === 'Add New Comment'){
-      // console.log('hi')
+  handleIssueModalClick(e) {
+    if (e.target.innerText === 'Add New Comment') {
       const commentContent = document.getElementById('comment-content').value
-      // console.log(commentContent);
       adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
       .then(comment =>
         console.log(new Comment(comment))
-
       )
+    } else if (e.target.innerText === 'Upvote') {
+      adapter.upvoteComment(parseInt(e.target.dataset.id))
+        .then(comment => {
+          e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes
+        });
+    } else if (e.target.innerText === 'Downvote') {
+      adapter.downvoteComment(parseInt(e.target.dataset.id))
+        .then(comment => {
+          e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes
+        });
+    } else {
+
     }
   }
 
@@ -133,8 +141,20 @@ class Dom {
         <p>${clickedStatus}</p>
         <h3>Comments</h3>
         ${clickedComments.map(comment => {
-          return `<div>${comment.content}</div>`
+          return `
+            <div class="ui grid">
+              <div class="ui buttons">
+                <button data-id="${comment.id}" class="ui button">Downvote</button>
+                <div class="or"></div>
+                <button data-id="${comment.id}" class="ui positive button">Upvote</button>
+              </div>
+              <div class="">
+                ${comment.votes}<br />${comment.content}
+              </div>
+            </div>
+          `
         }).join('')}
+          <p></p>
           <form class="ui form">
             <div class="field">
               <label>New Comment</label>

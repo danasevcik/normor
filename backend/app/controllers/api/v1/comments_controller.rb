@@ -14,4 +14,22 @@ class Api::V1::CommentsController < ApplicationController
     end
   end
 
+  def upvote
+    comment = Comment.find(params[:id])
+
+    comment.votes += 1
+    comment.save
+
+    render json: comment
+  end
+
+  def downvote
+    comment = Comment.find(params[:id])
+
+    comment.votes -= 1
+    comment.save
+
+    render json: comment
+  end
+
 end
