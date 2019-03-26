@@ -5,5 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('loaded')
   const dom = new Dom()
   dom.addAllEventListeners()
+  dom.seeAllIssues()
 
 });

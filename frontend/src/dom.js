@@ -34,8 +34,7 @@ class Dom {
     })
   }
 
-  seeAllIssues(e) {
-    e.preventDefault()
+  seeAllIssues() {
     console.log('handling all issues')
     issueAdapter.fetch()
     .then(issues => {
@@ -51,14 +50,14 @@ class Dom {
       case 'Upvote':
         issueAdapter.upvote({id: e.target.dataset.id})
         .then(issue => {
-          // debugger
-          // console.log(issue)
           e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
-        })
-        // debugger
+        });
         break;
       case 'Downvote':
-        const issueId = e.target.dataset.id
+        issueAdapter.downvote({id: e.target.dataset.id})
+        .then(issue => {
+          e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
+        });
         break;
       default:
         console.log('click something else')
@@ -77,7 +76,6 @@ class Dom {
   addAllEventListeners() {
     console.log('adding listeners')
     // this.form.addEventListener('submit', this.handleSubmit.bind(this))
-    this.issues.addEventListener('click', this.seeAllIssues.bind(this))
     this.issuesContainer.addEventListener('click', this.handleVote.bind(this))
   }
 

@@ -1,7 +1,7 @@
 class Api::V1::IssuesController < ApplicationController
   def index
-    @issues = Issue.all.sort { |issue| issue.votes }
-    render json: @issues
+    issues = Issue.order(votes: :desc)
+    render json: issues
   end
 
   def create
@@ -13,5 +13,23 @@ class Api::V1::IssuesController < ApplicationController
     else
       render json: @issue.errors.full_messages, status: 422
     end
+  end
+
+  def upvote
+    issue = Issue.find(params[:id])
+
+    issue.votes += 1
+    issue.save
+
+    render json: issue
+  end
+
+  def downvote
+    issue = Issue.find(params[:id])
+
+    issue.votes -= 1
+    issue.save
+
+    render json: issue
   end
 end

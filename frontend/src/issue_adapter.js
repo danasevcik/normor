@@ -29,6 +29,11 @@ const issueAdapter = (function() {
       return fetch(
         `${API_URL}/${params.id}/upvote`,
       ).then(response => response.json())
+    },
+    downvote: function(params) {
+      return fetch(
+        `${API_URL}/${params.id}/downvote`,
+      ).then(response => response.json())
     }
   }
 })();
