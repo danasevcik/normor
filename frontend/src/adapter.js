@@ -12,9 +12,9 @@ const adapter = (function() {
           headers: { "Content-Type": "application/json"},
           body: JSON.stringify(params)
       })
-        .then(res => {
-          if(res.ok) {
-            return res.json();
+        .then(response => {
+          if(response.ok) {
+            return response.json();
           }
 
           throw "Something went wrong!!!!";
