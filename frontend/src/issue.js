@@ -12,8 +12,8 @@ class Issue {
   }
 
   toHTML() {
-    const div = document.createElement('div')
-    div.innerHTML =
+    const newDiv = document.createElement('div');
+    newDiv.innerHTML =
     `<div class="sixteen wide column">
         <div class="ui horizontal segments">
             <div class="ui segment">
@@ -33,21 +33,8 @@ class Issue {
         </div>
       </div>`;
 
-    return div
+    return newDiv;
   }
-
-  render(domNode) {
-    domNode.appendChild(this.toHTML())
-  }
-
-  static renderAll(domNode) {
-    domNode.innerHTML = ''
-
-    this.all.forEach(issue => {
-      issue.render(domNode)
-    })
-  }
-
 }
 
 Issue.all = [];

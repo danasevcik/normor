@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-  // categoryAdapter.fetch().then(categories => console.log(categories));
-  // categoryAdapter.fetch().then(categories => console.log(categories));
-  console.log('loaded')
-  const dom = new Dom()
-  dom.addAllEventListeners()
-  dom.seeAllIssues()
-
+  const DOM = new Dom();
+  DOM.addAllEventListeners();
+  DOM.renderAllIssues();
 });
