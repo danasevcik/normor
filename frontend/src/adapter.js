@@ -18,7 +18,7 @@ const adapter = (function() {
           }
 
           throw "Something went wrong!!!!";
-        })
+        });
     },
     upvoteIssue: function(issueId) {
       return fetch(`${API_URL}/${issueId}/upvote`).then(response => response.json());
