@@ -6,7 +6,8 @@ class Dom {
     this.issuesContainer = document.querySelector('div.ui.stackable.grid.container');
     this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
     this.topMenu = document.querySelector('div.ui.top.menu');
-    this.issueModal = document.getElementById('issue-modal');
+    this.issueModal = document.getElementById('view-issue-modal');
+    this.categoryDropdown = document.getElementById('issuecategory');
     // new comment form
   }
 
@@ -15,6 +16,15 @@ class Dom {
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
+  }
+
+  populateDropDown() {
+    Category.all.forEach(category => {
+      const newOption = document.createElement('option')
+      newOption.innerText = category.title
+      newOption.setAttribute('data-id', category.id)
+      this.categoryDropdown.append(newOption)
+    })
   }
 
   handleSubmit() {
@@ -34,7 +44,7 @@ class Dom {
     .then(response => {
       console.log(response)
       this.issuesContainer.appendChild(new Issue(response).toHTML());
-      $('.ui.modal').modal('hide');
+      $('#create-issue-modal').modal('hide');
     }).catch(error => {
       console.log('in the catch');
       const errorDiv = document.createElement('div')
@@ -81,12 +91,13 @@ class Dom {
     const clickedTitle = clickedIssue.title
     const clickedDescription = clickedIssue.description
     const clickedVotes = clickedIssue.votes
-    const clickedDateReported = clickedIssue.createdAt
+    const clickedDateReported = clickedIssue.createdDate.slice(0,10)
     const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
     const clickedZip = clickedIssue.zipcode
-    const clickedCategory = Category.all.find(category => {
-      return category.id === clickedIssue.category_id
-    })
+    // const clickedCategory = Category.all.find(category => {
+    //   return category.id === clickedIssue.category_id
+    // })
+    // const clickedCategory =
     const clickedComments = clickedIssue.comments
     // debugger
 
@@ -107,7 +118,7 @@ class Dom {
       <h3>Votes</h3>
       <p>${clickedVotes}</p>
       <h3>Category</h3>
-      <p>${clickedCategory}</p>
+      <p>${clickedIssue.category}</p>
       <h3>Date Reported</h3>
       <p>${clickedDateReported}</p>
       <h3>Status</h3>
@@ -126,13 +137,13 @@ class Dom {
           <i class="checkmark icon"></i>
         </div>
     `
-    $('.ui.longer.modal').modal('show');
+    $('#view-issue-modal').modal('show');
   }
 
   handleRightMenu(e) {
     switch(e.target.innerText) {
       case 'Submit New Issue':
-        $('.ui.modal').modal('show');
+        $('#create-issue-modal').modal('show');
         break;
       case 'Refresh':
         this.renderAllIssues();

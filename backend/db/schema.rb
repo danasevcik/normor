@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2019_03_25_144241) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "plpgsql" 
 
   create_table "categories", force: :cascade do |t|
     t.string "title"

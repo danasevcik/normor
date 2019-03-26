@@ -1,10 +1,10 @@
 class Issue {
-  constructor({id, title, location, votes, category, description, created_at, resolved, comments}) {
+  constructor({id, title, location, votes, category_id, description, created_at, resolved, comments}) {
     this.id = id;
     this.title = title;
     this.location = location;
     this.votes = votes;
-    this.category = category;
+    this.categoryId = category_id;
     this.description = description;
     this.createdDate = created_at;
     this.resolved = resolved;
@@ -36,6 +36,10 @@ class Issue {
       </div>`;
 
     return newDiv;
+  }
+
+  get category() {
+    return Category.findById(this.categoryId).title
   }
 
   static findById(id) {
