@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_25_144241) do
+ActiveRecord::Schema.define(version: 2019_03_27_183218) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql" 
+  enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
     t.string "title"
@@ -29,6 +29,12 @@ ActiveRecord::Schema.define(version: 2019_03_25_144241) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "issues", force: :cascade do |t|
     t.string "title"
     t.integer "zipcode"
@@ -40,4 +46,13 @@ ActiveRecord::Schema.define(version: 2019_03_25_144241) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "text"
+    t.bigint "conversation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+  end
+
+  add_foreign_key "messages", "conversations"
 end

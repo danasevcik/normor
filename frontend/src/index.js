@@ -8,4 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     DOM.populateDropDown()
   })
+
+  var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+   
+  cable.subscriptions.create({
+    channel: 'ConversationsChannel'
+  }, {
+    received: (whatIsThis) => { console.log(whatIsThis)}
+  });
+
+
 });
