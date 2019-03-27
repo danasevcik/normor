@@ -28,7 +28,7 @@ class Dom {
   }
 
   handleIssueModalClick(e) {
-    if (e.target.innerText === 'Add New Comment') {
+    if (e.target.innerText === 'Add New Comment ') {
       const commentContent = document.getElementById('comment-content').value
       adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
       .then(comment =>
@@ -111,7 +111,7 @@ class Dom {
     const clickedTitle = clickedIssue.title
     const clickedDescription = clickedIssue.description
     const clickedVotes = clickedIssue.votes
-    const clickedDateReported = clickedIssue.createdDate.slice(0,10)
+    const clickedDateReported = new Date(clickedIssue.createdDate).toDateString()
     const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
     const clickedZip = clickedIssue.zipcode
     const clickedComments = clickedIssue.comments
@@ -169,7 +169,7 @@ class Dom {
             Back
           </div>
           <div class="ui positive button" data-id="${issueId}">
-            Add New Comment<i class="checkmark icon"></i>
+            Add New Comment <i class="checkmark icon"></i>
           </div>
       `
     $('#view-issue-modal').modal('show');
