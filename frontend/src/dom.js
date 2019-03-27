@@ -8,7 +8,6 @@ class Dom {
     this.topMenu = document.querySelector('div.ui.top.menu');
     this.issueModal = document.getElementById('view-issue-modal');
     this.categoryDropdown = document.getElementById('issuecategory');
-    // new comment form
   }
 
   addAllEventListeners() {
@@ -79,8 +78,6 @@ class Dom {
     });
   }
 
-  // handle submit for new comment
-  // send to adapter.createComment
 
   handleIssuesContainer(e) {
     console.log(e.target.className)
@@ -118,7 +115,16 @@ class Dom {
     const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
     const clickedZip = clickedIssue.zipcode
     const clickedComments = clickedIssue.comments
-    // sort this array by number of votes so that comments render in proper order
+
+    clickedComments.sort((a, b) => {
+      if (a.votes === b.votes) {
+        return 0
+      } else if (a.votes > b.votes) {
+        return -1
+      } else {
+        return 1
+      }
+    });
 
     this.issueModal.innerHTML = ''
       this.issueModal.innerHTML = `
