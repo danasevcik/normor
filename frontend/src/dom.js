@@ -7,7 +7,10 @@ class Dom {
     this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
     this.topMenu = document.querySelector('div.ui.top.menu');
     this.issueModal = document.getElementById('view-issue-modal');
+    this.chatModal = document.getElementById('chat-modal');
     this.categoryDropdown = document.getElementById('issuecategory');
+    this.chatInput = document.getElementById('chat-input');
+    this.chatContent = document.getElementById('chat-content')
   }
 
   addAllEventListeners() {
@@ -16,6 +19,8 @@ class Dom {
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
     this.issueModal.addEventListener('click', this.handleIssueModalClick.bind(this));
+    this.topMenu.addEventListener('click', this.handleTopMenu.bind(this));
+    this.chatModal.addEventListener('click', this.handleSendMessage.bind(this));
   }
 
   populateDropDown() {
@@ -186,6 +191,33 @@ class Dom {
       default:
         console.log('click something else');
     }
+  }
+
+  handleTopMenu(e) {
+    switch(e.target.innerText) {
+      case 'Chat':
+        // this.renderChatMessage('first message')
+        $('#chat-modal').modal('show');
+        break;
+      case 'Submit':
+        console.log('submit clicked');
+        break;
+      default:
+        console.log('click something else');
+    }
+  }
+
+  handleSendMessage(e) {
+    if (e.target.innerText === 'Send') {
+      adapter.sendMessage({text: `${username}: ${this.chatInput.value}`})
+    }
+  }
+
+  renderChatMessage(str) {
+    const newDiv = document.createElement('div')
+    newDiv.innerText = str
+    this.chatContent.append(newDiv)
+    this.chatInput.value = ''
   }
 
 

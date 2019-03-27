@@ -2,6 +2,7 @@ const adapter = (function() {
   const API_URL = 'http://localhost:3000/api/v1/issues';
   const API_URL_COMMENTS = 'http://localhost:3000/api/v1/comments';
   const API_URL_CATEGORIES = 'http://localhost:3000/api/v1/categories';
+  const API_URL_MESSAGES = 'http://localhost:3000/messages';
 
   return {
     fetchIssues: function() {
@@ -54,6 +55,13 @@ const adapter = (function() {
           }
           throw "Something went wrong!!!!";
         });
+    },
+    sendMessage: function(params) {
+      return fetch(API_URL_MESSAGES, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(params)
+      })
     }
   }
 })();

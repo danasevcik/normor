@@ -1,3 +1,4 @@
+const username = `USER ${Math.floor(Math.random() * 1000)}`
 document.addEventListener('DOMContentLoaded', function() {
   const DOM = new Dom();
   DOM.addAllEventListeners();
@@ -10,11 +11,17 @@ document.addEventListener('DOMContentLoaded', function() {
   })
 
   var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
-   
+
   cable.subscriptions.create({
     channel: 'ConversationsChannel'
   }, {
-    received: (whatIsThis) => { console.log(whatIsThis)}
+    received: (whatIsThis) => {
+
+      console.log(whatIsThis.content)
+      DOM.renderChatMessage(whatIsThis.content)
+      // debugger
+      new Message(whatIsThis)
+    }
   });
 
 

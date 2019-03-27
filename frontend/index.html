@@ -15,13 +15,14 @@
     <script src="./src/issue.js"></script>
     <script src="./src/comment.js"></script>
     <script src="./src/category.js"></script>
+    <script src="./src/message.js"></script>
     <script src="./src/index.js"></script>
   </head>
 
   <body>
     <header>
       <div class="ui top menu">
-        <a class="item">Browse</a>
+        <a class="item">Chat</a>
         <a class="item">Submit</a>
         <div class="right menu">
           <a class="item">Sign Up</a>
@@ -85,6 +86,30 @@
         </div>
       </div>
       <div id="view-issue-modal" class="ui longer modal">
+      </div>
+      <div id="chat-modal" class="ui longer modal">
+        <i class="close icon"></i>
+        <div class="header">
+          CHAT
+        </div>
+        <div id='chat-content' class="content">
+
+
+        </div>
+        <div class="ui fluid input">
+          <input id="chat-input" type="text" placeholder="Type Message Here">
+        </div>
+        <div class="actions">
+          <div class="ui black deny button">
+            Back
+          </div>
+          <button class="ui green right labeled icon button">Send</button>
+          <!-- <div class="ui positive right labeled icon button">
+            Send
+            <i class="checkmark icon"></i>
+          </div> -->
+        </div>
+
       </div>
     </main>
   </body>
