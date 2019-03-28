@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Project Normor</title>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.css">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <script
       src="https://code.jquery.com/jquery-3.1.1.min.js"
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -18,42 +19,28 @@
     <script src="./src/message.js"></script>
     <script src="./src/index.js"></script>
   </head>
-
-  <body>
+  <body style="background-image: url('./assets/img/retina_wood.png'); background-repeat: repeat;">
     <header>
-      <div class="ui fixed inverted menu">
+      <div class="ui fixed inverted menu" style="padding-top: 10px; padding-bottom: 10px;">
         <div class="ui container">
           <a href="#" class="header item">
-            <img class="logo" src="assets/images/logo.png">
+            <i class="home icon"></i>
             Neighborhood Issues
           </a>
           <a href="#" class="item">Submit New Issue</a>
           <a href="#" class="item">Chat</a>
           <a href="#" class="item">Refresh</a>
+          <div class="right menu">
+            <a href="#" class="item">Contact</a>
+            <a href="#" class="item">About</a>
+          </div>
         </div>
       </div>
-<!--       <div class="ui top menu">
-        <a class="item">Chat</a>
-        <a class="item">Submit</a>
-        <div class="right menu">
-          <a class="item">Sign Up</a>
-          <a class="item">Help</a>
-        </div>
-      </div>
-      <div class="ui right fixed vertical menu">
-        <br>
-        <br>
-        <a class="item">Submit New Issue</a>
-        <a class="item">Refresh</a>
-      </div> -->
     </header>
 
     <main id="main-container">
-      <div class="ui main text container">
-<!--         <h1 class="ui header">Semantic UI Fixed Template</h1>
-        <p>This is a basic fixed menu template using fixed size containers.</p>
-        <p>A text container is used for the main container, which is useful for single column layouts</p> -->
-        <div class="ui stackable grid container" style="margin-top: 3em;">
+      <div class="ui container">
+        <div id="issues-container" class="ui centered grid" style="margin-top: 5em;">
         </div>
       </div>
       <div id='create-issue-modal' class="ui modal">

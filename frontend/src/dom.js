@@ -3,8 +3,7 @@ class Dom {
     this.newIssueForm = document.querySelector('form.ui.form');
     this.newIssueSubmitButton = document.querySelector('div.ui.positive.right.labeled.icon.button');
     this.issues = document.querySelector('#allissues');
-    this.issuesContainer = document.querySelector('div.ui.stackable.grid.container');
-    // this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
+    this.issuesContainer = document.getElementById('issues-container');
     this.topMenu = document.querySelector('div.ui.fixed.inverted.menu');
     this.issueModal = document.getElementById('view-issue-modal');
     this.chatModal = document.getElementById('chat-modal');
@@ -17,7 +16,6 @@ class Dom {
     console.log('adding listeners')
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
-    // this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
     this.issueModal.addEventListener('click', this.handleIssueModalClick.bind(this));
     this.topMenu.addEventListener('click', this.handleTopMenu.bind(this));
     this.chatModal.addEventListener('click', this.handleSendMessage.bind(this));
@@ -95,19 +93,19 @@ class Dom {
 
 
   handleIssuesContainer(e) {
-    console.log(e.target.className)
-    let issueId = parseInt(e.target.dataset.id)
+    const issueId = parseInt(e.target.dataset.id)
     switch(e.target.className) {
-      case 'ui positive button':
-        adapter.upvoteIssue(e.target.dataset.id)
-          .then(issue =>
-            e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
+      case 'arrow up icon':
+        adapter.upvoteIssue(issueId)
+          .then(issue => {
+            debugger
+            e.target.parentElement.previousElementSibling.innerText = `${issue.votes} Votes`; }
           );
         break;
-      case 'ui button':
-        adapter.downvoteIssue(e.target.dataset.id)
-          .then(issue =>
-            e.target.parentNode.parentElement.firstElementChild.innerText = issue.votes
+      case 'arrow down icon':
+        adapter.downvoteIssue(issueId)
+          .then(issue => 
+            e.target.parentElement.nextElementSibling.innerText = `${issue.votes} Votes`
           );
         break;
       case 'ui segment':
@@ -189,19 +187,6 @@ class Dom {
           </div> -->
       `
     $('#view-issue-modal').modal('show');
-  }
-
-  handleRightMenu(e) {
-    switch(e.target.innerText) {
-      case 'Submit New Issue':
-        $('#create-issue-modal').modal('show');
-        break;
-      case 'Refresh':
-        this.renderAllIssues();
-        break;
-      default:
-        console.log('click something else');
-    }
   }
 
   handleTopMenu(e) {
