@@ -93,29 +93,46 @@ class Dom {
 
 
   handleIssuesContainer(e) {
+    console.log(e);
     const issueId = parseInt(e.target.dataset.id)
-    switch(e.target.className) {
-      case 'arrow up icon':
-        adapter.upvoteIssue(issueId)
-          .then(issue => {
-            debugger
-            e.target.parentElement.previousElementSibling.innerText = `${issue.votes} Votes`; }
-          );
-        break;
-      case 'arrow down icon':
-        adapter.downvoteIssue(issueId)
-          .then(issue => 
-            e.target.parentElement.nextElementSibling.innerText = `${issue.votes} Votes`
-          );
-        break;
-      case 'ui segment':
-        this.renderIssueModal(issueId);
-        break;
-      case 'issue details':
-        this.renderIssueModal(issueId);
-        break;
-      default:
-        console.log(e.target.className);
+
+    if (e.target.className === 'arrow up icon') {
+      adapter.upvoteIssue(issueId)
+        .then(issue => {
+          const thisIssue = Issue.findById(issueId);
+          thisIssue.votes += 1;
+          this.renderIssueModal(issueId)
+          e.target.parentElement.previousElementSibling.innerText = `${issue.votes} Votes`;
+        });
+    } else if (e.target.className === 'arrow down icon') {
+      adapter.downvoteIssue(issueId)
+        .then(issue => {
+          const thisIssue = Issue.findById(issueId);
+          thisIssue.votes -= 1;
+          this.renderIssueModal(issueId)
+          e.target.parentElement.nextElementSibling.innerText = `${issue.votes} Votes`
+        });
+    } else if (e.target.className.includes('issue upvote')) {
+      adapter.upvoteIssue(issueId)
+        .then(issue => {
+          const thisIssue = Issue.findById(issueId);
+          thisIssue.votes += 1;
+          this.renderIssueModal(issueId)
+          e.target.previousElementSibling.innerText = `${issue.votes} Votes`;
+        });
+    } else if (e.target.className.includes('issue downvote')) {
+      adapter.downvoteIssue(issueId)
+        .then(issue => {
+          const thisIssue = Issue.findById(issueId);
+          thisIssue.votes -= 1;
+          this.renderIssueModal(issueId)
+          e.target.nextElementSibling.innerText = `${issue.votes} Votes`
+        });
+    } else if (e.target.className.includes('issue details')) {
+      this.renderIssueModal(issueId);
+      $('#view-issue-modal').modal('show');
+    } else {
+      console.log('I dunno what to do at this point.');
     }
   }
 
@@ -185,8 +202,7 @@ class Dom {
           <!-- <div class="ui positive button" data-id="${issueId}">
             Add New Comment <i class="checkmark icon"></i>
           </div> -->
-      `
-    $('#view-issue-modal').modal('show');
+      `;
   }
 
   handleTopMenu(e) {
@@ -203,6 +219,9 @@ class Dom {
         break;
       case 'Refresh':
         this.renderAllIssues();
+        break;
+      case 'Contact':
+        $('#contact-modal').modal('show');
         break;
       default:
         console.log('click something else');

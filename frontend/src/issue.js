@@ -22,26 +22,26 @@ class Issue {
     newDiv.setAttribute('style', 'border-style: solid; border-radius: 5px; border-width: 1px; background-color: white; margin-top: 2em;');
     newDiv.innerHTML =
       `<div class="ui grid">
-          <div class="four wide column">
+          <div class="four wide column issue details" data-id="${this.id}">
             <div class="blue ui buttons">
-              <button class="ui icon button">
+              <button class="ui icon button issue downvote" data-id="${this.id}">
                 <i class="arrow down icon" data-id="${this.id}"></i>
               </button>
-              <button class="ui button">
+              <button class="ui button issue details" data-id="${this.id}">
                 ${this.votes} Votes
               </button>
-              <button class="ui right icon button">
+              <button class="ui right icon button issue upvote" data-id="${this.id}">
                 <i class="arrow up icon" data-id="${this.id}"></i>
               </button>
             </div>
           </div>
-          <div class="nine wide column middle aligned">
+          <div class="nine wide column middle aligned issue details" data-id="${this.id}">
             <div class="column">
               <h2 class="issue details" data-id="${this.id}">${this.title}</h2>
             </div>
           </div>
-          <div class="three wide column middle aligned">
-            <span data-id="${this.id}">${this.comments.length} Comments</span>
+          <div class="three wide column middle aligned issue details" data-id="${this.id}">
+            <span class="issue details" data-id="${this.id}">${this.comments.length} Comments</span>
           </div>
         </div>`;
     // `<div class="four wide column" data-id="${this.id}">
