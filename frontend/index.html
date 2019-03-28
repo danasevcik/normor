@@ -21,7 +21,18 @@
 
   <body>
     <header>
-      <div class="ui top menu">
+      <div class="ui fixed inverted menu">
+        <div class="ui container">
+          <a href="#" class="header item">
+            <img class="logo" src="assets/images/logo.png">
+            Neighborhood Issues
+          </a>
+          <a href="#" class="item">Submit New Issue</a>
+          <a href="#" class="item">Chat</a>
+          <a href="#" class="item">Refresh</a>
+        </div>
+      </div>
+<!--       <div class="ui top menu">
         <a class="item">Chat</a>
         <a class="item">Submit</a>
         <div class="right menu">
@@ -34,11 +45,16 @@
         <br>
         <a class="item">Submit New Issue</a>
         <a class="item">Refresh</a>
-      </div>
+      </div> -->
     </header>
 
     <main id="main-container">
-      <div class="ui stackable grid container">
+      <div class="ui main text container">
+<!--         <h1 class="ui header">Semantic UI Fixed Template</h1>
+        <p>This is a basic fixed menu template using fixed size containers.</p>
+        <p>A text container is used for the main container, which is useful for single column layouts</p> -->
+        <div class="ui stackable grid container" style="margin-top: 3em;">
+        </div>
       </div>
       <div id='create-issue-modal' class="ui modal">
         <i class="close icon"></i>
@@ -67,9 +83,6 @@
                 <label>Category</label>
                 <select id='issuecategory' class="ui fluid dropdown">
                   <option data-value="">Category</option>
-                  <!-- <option data-value="" id='1'>traffic</option> -->
-                  <!-- <option data-value="">Roads</option>
-                  <option data-value="">Safety</option> -->
                  </select>
               </div>
             </div>
@@ -104,12 +117,7 @@
             Back
           </div>
           <button class="ui green right labeled icon button">Send</button>
-          <!-- <div class="ui positive right labeled icon button">
-            Send
-            <i class="checkmark icon"></i>
-          </div> -->
         </div>
-
       </div>
     </main>
   </body>

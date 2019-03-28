@@ -4,8 +4,8 @@ class Dom {
     this.newIssueSubmitButton = document.querySelector('div.ui.positive.right.labeled.icon.button');
     this.issues = document.querySelector('#allissues');
     this.issuesContainer = document.querySelector('div.ui.stackable.grid.container');
-    this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
-    this.topMenu = document.querySelector('div.ui.top.menu');
+    // this.rightMenu = document.querySelector('div.ui.right.fixed.vertical.menu');
+    this.topMenu = document.querySelector('div.ui.fixed.inverted.menu');
     this.issueModal = document.getElementById('view-issue-modal');
     this.chatModal = document.getElementById('chat-modal');
     this.categoryDropdown = document.getElementById('issuecategory');
@@ -17,7 +17,7 @@ class Dom {
     console.log('adding listeners')
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
-    this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
+    // this.rightMenu.addEventListener('click', this.handleRightMenu.bind(this));
     this.issueModal.addEventListener('click', this.handleIssueModalClick.bind(this));
     this.topMenu.addEventListener('click', this.handleTopMenu.bind(this));
     this.chatModal.addEventListener('click', this.handleSendMessage.bind(this));
@@ -212,6 +212,12 @@ class Dom {
         break;
       case 'Submit':
         console.log('submit clicked');
+        break;
+      case 'Submit New Issue':
+        $('#create-issue-modal').modal('show');
+        break;
+      case 'Refresh':
+        this.renderAllIssues();
         break;
       default:
         console.log('click something else');

@@ -17,9 +17,9 @@ class Issue {
 
   toHTML() {
     const newDiv = document.createElement('div');
+    newDiv.setAttribute('class', 'sixteen wide column');
     newDiv.innerHTML =
-    `<div class="sixteen wide column">
-        <div class="ui horizontal segments">
+    `<div class="ui horizontal segments">
           <div class="ui segment" data-id="${this.id}">
             <span style="font-weight: bold;">${this.votes}</span>
             <div class="ui buttons">
@@ -32,8 +32,7 @@ class Issue {
             <h2 class="issue details" data-id="${this.id}">${this.title}</h2>
             <span class="issue details" data-id="${this.id}">${this.comments.length} Comments</span>
           </div>
-        </div>
-      </div>`;
+        </div>`;
 
     return newDiv;
   }
