@@ -33,15 +33,25 @@ class Dom {
   }
 
   handleIssueModalClick(e) {
-    if (e.target.innerText === 'Add New Comment ') {
+    console.log(e.target.dataset)
+    // debugger
+    if (e.target.innerText === "Add New Comment") {
+      console.log('clicked')
       const commentContent = document.getElementById('comment-content').value
       adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
-      .then(comment =>
-        console.log(new Comment(comment))
-      )
+      .then(comment => {
+        const thisIssue = Issue.findById(parseInt(e.target.dataset.id))
+        thisIssue.comments.push(new Comment(comment))
+        this.renderIssueModal(parseInt(e.target.dataset.id))
+        const parentSpan = Array.from(document.querySelectorAll('span.issue.details')).find(span => span.dataset.id === e.target.dataset.id)
+        console.log(parentSpan)
+        parentSpan.innerText = `${thisIssue.comments.length} Comments`
+      })
     } else if (e.target.innerText === 'Upvote') {
       adapter.upvoteComment(parseInt(e.target.dataset.id))
         .then(comment => {
+          const thisComment = Comment.findById(comment.id)
+          thisComment.votes += 1
           e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes
         });
     } else if (e.target.innerText === 'Downvote') {
@@ -173,9 +183,10 @@ class Dom {
           <div class="ui black deny button">
             Back
           </div>
-          <div class="ui positive button" data-id="${issueId}">
+          <button class="ui green right labeled icon button" data-id="${issueId}">Add New Comment <i class="checkmark icon"></i></button>
+          <!-- <div class="ui positive button" data-id="${issueId}">
             Add New Comment <i class="checkmark icon"></i>
-          </div>
+          </div> -->
       `
     $('#view-issue-modal').modal('show');
   }
