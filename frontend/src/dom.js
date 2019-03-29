@@ -172,11 +172,6 @@ class Dom {
             </div>
           </div>
           `;
-          // <div class="ui buttons">
-          // <button data-id="${comment.id}" class="ui button">Downvote</button>
-          // <div class="or"></div>
-          // <button data-id="${comment.id}" class="ui positive button">Upvote</button>
-          // </div>
         }).join('')}
           <p></p>
           <form class="ui form">
@@ -199,8 +194,14 @@ class Dom {
   handleTopMenu(e) {
     switch(e.target.innerText) {
       case 'Chat':
-        adapter.sendMessage({ text: `${username} has joined the chat.` });
-        $('#chat-modal').modal('show');
+        $('#chat-modal').modal({
+          onHide: () => {
+            adapter.sendMessage({ text: `${username} has exited the chat.` });
+          },
+          onShow: () => {
+            adapter.sendMessage({ text: `${username} has joined the chat.` });
+          }
+        }).modal('show');
         break;
       case 'Submit New Issue':
         $('#create-issue-modal').modal('show');
@@ -230,6 +231,10 @@ class Dom {
     newDiv.innerText = str;
     this.chatContent.append(newDiv);
     this.chatInput.value = '';
+  }
+
+  renderUnreadMessageNotificationCount() {
+
   }
 
   renderAllIssues() {
