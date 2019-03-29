@@ -9,7 +9,6 @@ class Comment {
   static findById(id) {
     return Comment.all.find(comment => comment.id === id);
   }
-
 }
 
 Comment.all = [];

@@ -54,21 +54,21 @@
             <div class="field">
               <label>Title</label>
                 <div class="field">
-                  <input id='issuetitle' type="text" name="title" placeholder="Title">
+                  <input id='issue-title' type="text" name="title" placeholder="Title">
                 </div>
             </div>
             <div class="field">
               <label>Description</label>
-              <textarea id='issuedescription' name="description" placeholder="Description"></textarea>
+              <textarea id='issue-description' name="description" placeholder="Description"></textarea>
             </div>
             <div class="two fields">
               <div class="field">
                 <label>Zipcode</label>
-                <input id='issuezipcode' type="text" name="zipcode" placeholder="Zipcode">
+                <input id='issue-zipcode' type="text" name="zipcode" placeholder="Zipcode">
               </div>
               <div class="field">
                 <label>Category</label>
-                <select id='issuecategory' class="ui fluid dropdown">
+                <select id='issue-category' class="ui fluid dropdown">
                   <option data-value="">Category</option>
                  </select>
               </div>
@@ -90,7 +90,7 @@
       <div id="chat-modal" class="ui longer modal">
         <i class="close icon"></i>
         <div class="header">
-          CHAT
+          Chat
         </div>
         <div id='chat-content' class="content">
         </div>
@@ -98,10 +98,9 @@
           <input id="chat-input" type="text" placeholder="Type Message Here">
         </div>
         <div class="actions">
-          <div class="ui black deny button">
-            Back
+          <div class="ui green labeled submit icon button">
+            <i class="icon edit"></i> Send
           </div>
-          <button class="ui green right labeled icon button">Send</button>
         </div>
       </div>
       <div id="contact-modal" class="ui modal">

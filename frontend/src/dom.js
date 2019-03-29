@@ -1,100 +1,90 @@
 class Dom {
   constructor() {
+    this.topMenu = document.querySelector('div.ui.fixed.inverted.menu');
     this.newIssueForm = document.querySelector('form.ui.form');
     this.newIssueSubmitButton = document.querySelector('div.ui.positive.right.labeled.icon.button');
-    this.issues = document.querySelector('#allissues');
     this.issuesContainer = document.getElementById('issues-container');
-    this.topMenu = document.querySelector('div.ui.fixed.inverted.menu');
     this.issueModal = document.getElementById('view-issue-modal');
     this.chatModal = document.getElementById('chat-modal');
-    this.categoryDropdown = document.getElementById('issuecategory');
     this.chatInput = document.getElementById('chat-input');
-    this.chatContent = document.getElementById('chat-content')
+    this.chatContent = document.getElementById('chat-content');
+    this.categoryDropdown = document.getElementById('issue-category');
   }
 
   addAllEventListeners() {
-    console.log('adding listeners')
+    this.topMenu.addEventListener('click', this.handleTopMenu.bind(this));
     this.newIssueSubmitButton.addEventListener('click', this.handleSubmit.bind(this))
     this.issuesContainer.addEventListener('click', this.handleIssuesContainer.bind(this));
     this.issueModal.addEventListener('click', this.handleIssueModalClick.bind(this));
-    this.topMenu.addEventListener('click', this.handleTopMenu.bind(this));
     this.chatModal.addEventListener('click', this.handleSendMessage.bind(this));
   }
 
   populateDropDown() {
     Category.all.forEach(category => {
-      const newOption = document.createElement('option')
-      newOption.innerText = category.title
-      newOption.setAttribute('data-id', category.id)
-      this.categoryDropdown.append(newOption)
-    })
-  }
-
-  handleIssueModalClick(e) {
-    console.log(e.target.dataset)
-    // debugger
-    if (e.target.innerText === "Add New Comment") {
-      console.log('clicked')
-      const commentContent = document.getElementById('comment-content').value
-      adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
-      .then(comment => {
-        const thisIssue = Issue.findById(parseInt(e.target.dataset.id))
-        thisIssue.comments.push(new Comment(comment))
-        this.renderIssueModal(parseInt(e.target.dataset.id))
-        const parentSpan = Array.from(document.querySelectorAll('span.issue.details')).find(span => span.dataset.id === e.target.dataset.id)
-        console.log(parentSpan)
-        parentSpan.innerText = `${thisIssue.comments.length} Comments`
-      })
-    } else if (e.target.innerText === 'Upvote') {
-      adapter.upvoteComment(parseInt(e.target.dataset.id))
-        .then(comment => {
-          const thisComment = Comment.findById(comment.id)
-          thisComment.votes += 1
-          e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes
-        });
-    } else if (e.target.innerText === 'Downvote') {
-      adapter.downvoteComment(parseInt(e.target.dataset.id))
-        .then(comment => {
-          e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes
-        });
-    } else {
-
-    }
-  }
-
-
-  handleSubmit() {
-    console.log('handling submit');
-
-    const title = this.newIssueForm.querySelector('#issuetitle').value
-    const description = this.newIssueForm.querySelector('#issuedescription').value
-    const zipcode = this.newIssueForm.querySelector('#issuezipcode').value
-    const category = this.newIssueForm.querySelector('#issuecategory').value
-
-    this.newIssueForm.querySelector('#issuetitle').value = ''
-    this.newIssueForm.querySelector('#issuedescription').value = ''
-    this.newIssueForm.querySelector('#issuezipcode').value = ''
-    this.newIssueForm.querySelector('#issuecategory').value = 'Category'
-
-    adapter.createIssue({title: title, description: description, zipcode: zipcode, category:category})
-    .then(response => {
-      console.log(response)
-      this.issuesContainer.appendChild(new Issue(response).toHTML());
-      $('#create-issue-modal').modal('hide');
-    }).catch(error => {
-      console.log('in the catch');
-      const errorDiv = document.createElement('div')
-      errorDiv.innerHTML = `
-        <h1 class="header">That issue can not be posted.</h1>
-      `
-      this.newIssueForm.appendChild(errorDiv);
+      const newOption = document.createElement('option');
+      newOption.innerText = category.title;
+      newOption.setAttribute('data-id', category.id);
+      this.categoryDropdown.append(newOption);
     });
   }
 
+  handleIssueModalClick(e) {
+    switch(e.target.innerText) {
+      case 'Add New Comment':
+        const commentContent = document.getElementById('comment-content').value
+        adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
+          .then(comment => {
+            const thisIssue = Issue.findById(parseInt(e.target.dataset.id));
+            thisIssue.comments.push(new Comment(comment));
+            this.renderIssueModal(parseInt(e.target.dataset.id));
+
+            const parentSpan = Array.from(document.querySelectorAll('span.issue.details')).find(span => span.dataset.id === e.target.dataset.id);
+            parentSpan.innerText = `${thisIssue.comments.length} Comments`;
+          });
+        break;
+      case 'Upvote':
+        adapter.upvoteComment(parseInt(e.target.dataset.id))
+          .then(comment => {
+            Comment.findById(comment.id).votes += 1;
+            e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes;
+          });
+        break;
+      case 'Downvote':
+        adapter.downvoteComment(parseInt(e.target.dataset.id))
+          .then(comment => {
+            Comment.findById(comment.id).votes -= 1;
+            e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes;
+          });
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleSubmit() {
+    const title = this.newIssueForm.querySelector('#issue-title').value;
+    const description = this.newIssueForm.querySelector('#issue-description').value;
+    const zipcode = this.newIssueForm.querySelector('#issue-zipcode').value;
+    const category = this.newIssueForm.querySelector('#issue-category').value;
+
+    this.newIssueForm.querySelector('#issue-title').value = '';
+    this.newIssueForm.querySelector('#issue-description').value = '';
+    this.newIssueForm.querySelector('#issue-zipcode').value = '';
+    this.newIssueForm.querySelector('#issue-category').value = 'Category';
+
+    adapter.createIssue({ title: title, description: description, zipcode: zipcode, category:category })
+      .then(attributes => {
+        this.issuesContainer.appendChild(new Issue(attributes).toHTML());
+        $('#create-issue-modal').modal('hide');
+      }).catch(error => {
+        const errorDiv = document.createElement('div');
+        errorDiv.innerHTML = '<h1 class="header">That issue can not be posted.</h1>';
+        this.newIssueForm.appendChild(errorDiv);
+      });
+  }
 
   handleIssuesContainer(e) {
-    console.log(e);
-    const issueId = parseInt(e.target.dataset.id)
+    const issueId = parseInt(e.target.dataset.id);
 
     if (e.target.className === 'arrow up icon') {
       adapter.upvoteIssue(issueId)
@@ -138,41 +128,24 @@ class Dom {
 
   renderIssueModal(issueId) {
     const clickedIssue = Issue.findById(issueId);
-    const clickedTitle = clickedIssue.title
-    const clickedDescription = clickedIssue.description
-    const clickedVotes = clickedIssue.votes
-    const clickedDateReported = new Date(clickedIssue.createdDate).toDateString()
-    const clickedStatus = (clickedIssue.resolved ? 'Resolved' : 'Not Resolved')
-    const clickedZip = clickedIssue.zipcode
-    const clickedComments = clickedIssue.comments
-
-    clickedComments.sort((a, b) => {
-      if (a.votes === b.votes) {
-        return 0
-      } else if (a.votes > b.votes) {
-        return -1
-      } else {
-        return 1
-      }
-    });
+    clickedIssue.sortComments();
 
     this.issueModal.innerHTML = ''
-      this.issueModal.innerHTML = `
-      <div class="header">Issue: ${clickedTitle}</div>
+    this.issueModal.innerHTML = `
+      <div class="header">${clickedIssue.title}</div>
       <div class="scrolling content">
-        <h2>Details</h2>
-        <h3>Description</h3>
-        <p>${clickedDescription}</p>
-        <h3>Votes</h3>
-        <p>${clickedVotes}</p>
-        <h3>Category</h3>
+        <h4>Description</h4>
+        <p>${clickedIssue.description}</p>
+        <h4>Votes</h4>
+        <p>${clickedIssue.votes}</p>
+        <h4>Category</h4>
         <p>${clickedIssue.category}</p>
-        <h3>Date Reported</h3>
-        <p>${clickedDateReported}</p>
-        <h3>Status</h3>
-        <p>${clickedStatus}</p>
-        <h3>Comments</h3>
-        ${clickedComments.map(comment => {
+        <h4>Date Reported</h4>
+        <p>${new Date(clickedIssue.createdDate).toDateString()}</p>
+        <h4>Status</h4>
+        <p>${(clickedIssue.resolved ? 'Resolved' : 'Not Resolved')}</p>
+        <h4 class="ui dividing header" style="margin-bottom: 2em;">Comments</h4>
+        ${clickedIssue.comments.map(comment => {
           return `
             <div class="ui grid">
               <div class="ui buttons">
@@ -184,11 +157,11 @@ class Dom {
                 ${comment.votes}<br />${comment.content}
               </div>
             </div>
-          `
+          `;
         }).join('')}
           <p></p>
           <form class="ui form">
-            <div class="field">
+            <div class="field" style="margin-top: 2em;">
               <label>New Comment</label>
               <textarea id='comment-content' name="content" placeholder="Type Your Comment Here"></textarea>
             </div>
@@ -201,18 +174,14 @@ class Dom {
           <button class="ui green right labeled icon button" data-id="${issueId}">Add New Comment <i class="checkmark icon"></i></button>
           <!-- <div class="ui positive button" data-id="${issueId}">
             Add New Comment <i class="checkmark icon"></i>
-          </div> -->
-      `;
+          </div> -->`;
   }
 
   handleTopMenu(e) {
     switch(e.target.innerText) {
       case 'Chat':
-        // this.renderChatMessage('first message')
+        this.renderChatMessage(`${username} has joined the chat.`);
         $('#chat-modal').modal('show');
-        break;
-      case 'Submit':
-        console.log('submit clicked');
         break;
       case 'Submit New Issue':
         $('#create-issue-modal').modal('show');
@@ -223,32 +192,31 @@ class Dom {
       case 'Contact':
         $('#contact-modal').modal('show');
         break;
+      case 'About':
+        break;
       default:
-        console.log('click something else');
+        break;
     }
   }
 
   handleSendMessage(e) {
     if (e.target.innerText === 'Send') {
-      adapter.sendMessage({text: `${username}: ${this.chatInput.value}`})
+      adapter.sendMessage({ text: `${username}: ${this.chatInput.value}` });
     }
   }
 
   renderChatMessage(str) {
-    const newDiv = document.createElement('div')
-    newDiv.innerText = str
-    this.chatContent.append(newDiv)
-    this.chatInput.value = ''
+    const newDiv = document.createElement('div');
+    newDiv.innerText = str;
+    this.chatContent.append(newDiv);
+    this.chatInput.value = '';
   }
 
-
-
   renderAllIssues() {
-    console.log('Rendering all issues');
     this.issuesContainer.innerHTML = '';
     adapter.fetchIssues()
-      .then(issues =>
-        issues.forEach(issue => this.issuesContainer.appendChild(new Issue(issue).toHTML()))
-      );
+      .then(issues => issues.forEach(issue => 
+        this.issuesContainer.appendChild(new Issue(issue).toHTML())
+      ));
   }
 }

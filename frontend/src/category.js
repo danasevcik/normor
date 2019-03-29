@@ -6,10 +6,8 @@ class Category {
   }
 
   static findById(categoryId) {
-    return Category.all.find(category => category.id === categoryId)
+    return Category.all.find(category => category.id === categoryId);
   }
-
-
 }
 
 Category.all = [];
