@@ -208,9 +208,9 @@ class Dom {
       case 'Refresh':
         this.renderAllIssues();
         break;
-      case 'Contact':
-        $('#contact-modal').modal('show');
-        break;
+      // case 'Contact':
+      //   $('#contact-modal').modal('show');
+      //   break;
       case 'About':
         break;
       default:
