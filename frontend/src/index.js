@@ -1,4 +1,5 @@
 const username = `user${Math.floor(Math.random() * 1000)}`;
+let unreadMessages = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
   const DOM = new Dom();

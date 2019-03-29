@@ -8,6 +8,7 @@ class Dom {
     this.chatModal = document.getElementById('chat-modal');
     this.chatInput = document.getElementById('chat-input');
     this.chatContent = document.getElementById('chat-content');
+    this.chatMenuItem = document.getElementById('chat-menu-item');
     this.categoryDropdown = document.getElementById('issue-category');
   }
 
@@ -192,27 +193,29 @@ class Dom {
   }
 
   handleTopMenu(e) {
-    switch(e.target.innerText) {
-      case 'Chat':
+    switch(e.target.id) {
+      case 'chat-menu-item':
         $('#chat-modal').modal({
           onHide: () => {
             adapter.sendMessage({ text: `${username} has exited the chat.` });
           },
           onShow: () => {
+            unreadMessages = 0;
+            this.chatMenuItem.innerHTML = 'Chat';
             adapter.sendMessage({ text: `${username} has joined the chat.` });
           }
         }).modal('show');
         break;
-      case 'Submit New Issue':
+      case 'submit-new-issue-menu-item':
         $('#create-issue-modal').modal('show');
         break;
-      case 'Refresh':
+      case 'refresh-menu-item':
         this.renderAllIssues();
         break;
       // case 'Contact':
       //   $('#contact-modal').modal('show');
       //   break;
-      case 'About':
+      case 'about-menu-item':
         $('#about-modal').modal('show');
         break;
       default:
@@ -227,14 +230,20 @@ class Dom {
   }
 
   renderChatMessage(str) {
+    if (this.chatModal.classList.contains('hidden')) {
+      this.incrementUnreadMessages();
+    }
     const newDiv = document.createElement('div');
     newDiv.innerText = str;
     this.chatContent.append(newDiv);
     this.chatInput.value = '';
   }
 
-  renderUnreadMessageNotificationCount() {
-
+  incrementUnreadMessages() {
+    console.log('in incrementUnreadMessages');
+    this.chatMenuItem.innerHTML = `
+      Chat <div id="chat-notification-count" class="floating ui red label">${++unreadMessages}</div>
+    `;
   }
 
   renderAllIssues() {
