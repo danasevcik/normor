@@ -199,7 +199,7 @@ class Dom {
   handleTopMenu(e) {
     switch(e.target.innerText) {
       case 'Chat':
-        this.renderChatMessage(`${username} has joined the chat.`);
+        adapter.sendMessage({ text: `${username} has joined the chat.` });
         $('#chat-modal').modal('show');
         break;
       case 'Submit New Issue':
