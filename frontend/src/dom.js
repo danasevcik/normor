@@ -225,9 +225,31 @@ class Dom {
     }
   }
 
+  // randomizePhotos(photos) {
+  //   const randIndexNum = Math.floor(Math.random() * 13)
+    // console.log(randIndexNum)
+  //   const photo = photos[randIndexNum]
+  //   console.log(photo)
+  //   return photo
+  // }
+
   renderChatMessage(str) {
     const newDiv = document.createElement('div');
-    newDiv.innerText = str;
+    newDiv.setAttribute('class', 'ui grid')
+    newDiv.innerHTML = `
+      <div class="ui minimal comments">
+        <div class="comment">
+          <a class="avatar">
+            <i class="big user circle icon"></i>
+          </a>
+          <div class="content">
+
+            <div class="text">
+              ${str}
+            </div>
+          </div>
+        </div>
+      </div>`;
     this.chatContent.append(newDiv);
     this.chatInput.value = '';
   }
