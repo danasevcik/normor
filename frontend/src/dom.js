@@ -212,6 +212,7 @@ class Dom {
       //   $('#contact-modal').modal('show');
       //   break;
       case 'About':
+        $('#about-modal').modal('show');
         break;
       default:
         break;
