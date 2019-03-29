@@ -29,8 +29,9 @@ class Dom {
   }
 
   handleIssueModalClick(e) {
-    switch(e.target.innerText) {
-      case 'Add New Comment':
+    console.log(e.target.tagName)
+    switch(e.target.tagName) {
+      case 'BUTTON':
         const commentContent = document.getElementById('comment-content').value
         adapter.createComment({votes: 0, content: commentContent, issue_id: parseInt(e.target.dataset.id)})
           .then(comment => {
@@ -42,19 +43,23 @@ class Dom {
             parentSpan.innerText = `${thisIssue.comments.length} Comments`;
           });
         break;
-      case 'Upvote':
-        adapter.upvoteComment(parseInt(e.target.dataset.id))
-          .then(comment => {
-            Comment.findById(comment.id).votes += 1;
-            e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes;
-          });
-        break;
-      case 'Downvote':
-        adapter.downvoteComment(parseInt(e.target.dataset.id))
+      case 'I':
+        if(e.target.className === 'arrow down icon') {
+          console.log('down');
+          console.log(e.target);
+          adapter.downvoteComment(parseInt(e.target.dataset.id))
           .then(comment => {
             Comment.findById(comment.id).votes -= 1;
-            e.target.parentElement.nextElementSibling.firstChild.nodeValue = comment.votes;
+            e.target.parentNode.firstElementChild.innerText = `Votes: ${comment.votes}`
           });
+        } else {
+            console.log('up');
+          adapter.upvoteComment(parseInt(e.target.dataset.id))
+          .then(comment => {
+            Comment.findById(comment.id).votes += 1;
+            e.target.parentNode.firstElementChild.innerText = `Votes: ${comment.votes}`
+          });
+        }
         break;
       default:
         break;
@@ -147,17 +152,31 @@ class Dom {
         <h4 class="ui dividing header" style="margin-bottom: 2em;">Comments</h4>
         ${clickedIssue.comments.map(comment => {
           return `
-            <div class="ui grid">
-              <div class="ui buttons">
-                <button data-id="${comment.id}" class="ui button">Downvote</button>
-                <div class="or"></div>
-                <button data-id="${comment.id}" class="ui positive button">Upvote</button>
-              </div>
-              <div class="">
-                ${comment.votes}<br />${comment.content}
+          <div class='ui grid'>
+            <div class="ui minimal comments">
+              <div class="comment">
+                <a class="avatar">
+                  <i class="big user circle icon"></i>
+                </a>
+                <div class="content">
+                  <div class="metadata">
+                    <span class="date">Votes: ${comment.votes}</span>
+                    <i class="arrow down icon" data-id="${comment.id}"></i>
+                    <i class="arrow up icon" data-id="${comment.id}"></i>
+                  </div>
+                  <div class="text">
+                    ${comment.content}
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
           `;
+          // <div class="ui buttons">
+          // <button data-id="${comment.id}" class="ui button">Downvote</button>
+          // <div class="or"></div>
+          // <button data-id="${comment.id}" class="ui positive button">Upvote</button>
+          // </div>
         }).join('')}
           <p></p>
           <form class="ui form">
@@ -215,7 +234,7 @@ class Dom {
   renderAllIssues() {
     this.issuesContainer.innerHTML = '';
     adapter.fetchIssues()
-      .then(issues => issues.forEach(issue => 
+      .then(issues => issues.forEach(issue =>
         this.issuesContainer.appendChild(new Issue(issue).toHTML())
       ));
   }
