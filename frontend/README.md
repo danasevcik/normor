@@ -9,7 +9,7 @@ Normor is a community-driven app that allows users to report public issues to ci
 Normor was built to connect members in a community to report/discuss neighborhood issues. Normor allows users to communicate about these issues and upvote/downvote already reported issues. 
 
 ## Demo
-![demo gif](https://media.giphy.com/media/cmCQR2NAXHMx2lQHhx/200w_d.gif)
+![demo gif](https://media.giphy.com/media/cmCQR2NAXHMx2lQHhx/giphy.gif)
 
 You can watch a live demo of the app [here](https://www.youtube.com/watch?v=rTbQzWDsOKw).
 
